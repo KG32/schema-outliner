@@ -1,6 +1,6 @@
 import React from 'react';
-import Home from '../components/Home';
+import SchemaOutliner from '../components/schemaOutliner/schemaOutliner';
 
 export default function HomePage() {
-  return <Home />;
+  return <SchemaOutliner />;
 }

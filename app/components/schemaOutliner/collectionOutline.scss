@@ -1,0 +1,27 @@
+.collection-outline {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 400px;
+  outline: 1px solid grey;
+  margin: 10px;
+  padding: 5px;
+  .outline-top-bar {
+    height: 20px;
+    .collection-name {
+      font-weight: bold;
+    }
+  }
+  .outline-content {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    .outline-key {
+      &.warning {
+        font-weight: bold;
+        color: darkred;
+      }
+    }
+  }
+}
