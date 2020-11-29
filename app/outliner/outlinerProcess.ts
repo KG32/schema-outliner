@@ -1,6 +1,13 @@
+const MongoClient = require('mongodb').MongoClient;
+
+function connectToDb() {
+  return 'con';
+}
+
+
 process.on('message', message => {
-  // const result = longComputation();
   if (process.send) {
-    process.send('pong');
+    const out = connectToDb();
+    process.send(out);
   }
 });
