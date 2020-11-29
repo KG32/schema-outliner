@@ -11,10 +11,11 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+import { target } from '../configs/webpack.config.eslint';
 
 export default class AppUpdater {
   constructor() {
@@ -67,10 +68,17 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-  mainWindow = new BrowserWindow({
+  const displays = screen.getAllDisplays()
+  const externalDisplay = displays.find((display) => {
+    return display.bounds.x !== 0 || display.bounds.y !== 0
+  })
+
+  const windowOptions = {
     show: false,
     width: 1024,
     height: 728,
+    x: 50,
+    y: 50,
     icon: getAssetPath('icon.png'),
     webPreferences:
       (process.env.NODE_ENV === 'development' ||
@@ -82,7 +90,17 @@ const createWindow = async () => {
         : {
             preload: path.join(__dirname, 'dist/renderer.prod.js'),
           },
-  });
+  };
+
+  if (externalDisplay) {
+    const offset = 50;
+    const targetDisplay = displays[1]; // dev
+    windowOptions.x = targetDisplay.bounds.x + offset;
+    windowOptions.y = targetDisplay.bounds.y + offset;
+  }
+
+
+  mainWindow = new BrowserWindow(windowOptions);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
