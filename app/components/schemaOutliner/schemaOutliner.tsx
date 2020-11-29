@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import './schemaOutliner.scss';
 import CollectionOutline from './collectionOutline';
-import { fork } from 'child_process';
-
-
-const epPrefix = 'http://localhost:8080'; // DEV
+import OutlinerService from '../../outliner/OutlinerService';
 
 class SchemaOutliner extends Component {
 
@@ -20,31 +17,7 @@ class SchemaOutliner extends Component {
   }
 
   componentDidMount() {
-    this.startServer();
-  }
-
-  async startServer() {
-    console.log('start server');
-    const ps = fork(`${__dirname}/components/schemaOutliner/server.ts`);
-    console.log(ps);
-  }
-
-  async getData() {
-    this.setState({ loading: true, collections: [], connected: false }, async () => {
-      const { uri, dbName } = this.state;
-      const endpoint = `${epPrefix}/outline?uri=${uri}&dbName=${dbName}`;
-
-      try {
-        // const outlinerData = await getOutlinerData(endpoint);
-        // this.setState({ collections: outlinerData.outlinedCollections, }, () => {
-        //   this.setState({ loading: false, connected: true });
-        // });
-      } catch(e) {
-        alert(e);
-        this.setState({ loading: false, connected: false });
-      }
-
-    });
+    OutlinerService.startOutliner();
   }
 
 
