@@ -21,13 +21,17 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
     OutlinerService.startOutliner();
   }
 
-  getOutlinedData() {
-    OutlinerService.getOutlinedData();
+  async getOutlinedData() {
+    this.setState({ loading: true, connected: true });
+    const outlinedCollections = await OutlinerService.getOutlinedData();
+    console.log(outlinedCollections);
+    this.setState({ collections: outlinedCollections }, () => {
+      this.setState({ loading: false });
+    });
   }
 
 
   render() {
-    console.log('render schema outliner');
     return (
       <div id='schemaOutliner'>
         <h1>Schema Outliner <span className='status'></span></h1>
