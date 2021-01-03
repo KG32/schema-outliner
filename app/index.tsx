@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { render } from 'react-dom';
 import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
 import { history, configuredStore } from './store';
+import './reset.global.css';
 import './app.global.scss';
 
 const store = configuredStore();
