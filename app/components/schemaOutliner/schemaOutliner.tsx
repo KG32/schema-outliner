@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './schemaOutliner.scss';
+import './schemaOutliner.global.scss';
 import CollectionOutline from './collectionOutline';
 import OutlinerService from '../../outliner/OutlinerService';
 

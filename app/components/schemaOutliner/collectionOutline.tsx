@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './collectionOutline.scss';
+import './collectionOutline.global.scss';
 
 class CollectionOutline extends Component {
   render() {
