@@ -24,15 +24,16 @@ class OutlinerService {
     });
     this.process?.on('exit', (code) => {
       console.log('process exit', code);
+      this.process = null;
     });
   }
 
-  async startOutliner() {
+  async startOutliner(uri: string, db: string) {
     console.log('start outliner');
     if (this.process) {
-      this.killOutliner();
+      console.log('process already exists');
+      return;
     } else {
-      console.log('process slot free');
       this.process = fork(`${__dirname}/outliner/outlinerProcess.ts`);
     }
   }
@@ -43,6 +44,10 @@ class OutlinerService {
       this.process = null;
       this.watchForProcess();
     }
+  }
+
+  requestOutline() {
+    this.process?.send('outline');
   }
 
   pingProcess() {
