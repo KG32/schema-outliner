@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { fork, ChildProcess } from 'child_process';
 
 class OutlinerService {
@@ -34,7 +35,7 @@ class OutlinerService {
       console.log('process already exists');
       return;
     } else {
-      this.process = fork(`${__dirname}/outliner/outlinerProcess.ts`);
+      this.process = fork(`${__dirname}/outliner/outlinerProcess.js`);
     }
   }
 
