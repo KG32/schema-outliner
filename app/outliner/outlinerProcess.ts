@@ -1,11 +1,11 @@
 const MongoClient = require('mongodb').MongoClient;
 
-async function connectToDb(uri: string, dbName: string) {
+async function connectToDb() {
   // const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   // return client.db(dbName);
 }
 
-async function outlineSchema(uri: string, dbName: string) {
+async function outlineSchema() {
 
 }
 
