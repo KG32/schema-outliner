@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './collectionOutline.global.scss';
 
-class CollectionOutline extends Component {
-  render() {
-    const collection = this.props.collection;
+function CollectionOutline(props: { collection: any }) {
+  const { collection } = props;
 
     return (
       <div className='collection-outline'>
@@ -11,7 +10,7 @@ class CollectionOutline extends Component {
           <p className='collection-name'>{collection.name} ({collection.docsCount})</p>
         </div>
         <ul className='outline-content'>
-          {collection.keys.map((key) => {
+          {collection.keys.map((key: any) => {
             let className = 'outline-key';
             if(key.percentage < 100) className = className+' warning';
             return (
@@ -21,8 +20,6 @@ class CollectionOutline extends Component {
         </ul>
       </div>
     )
-  }
 }
-
 
 export default CollectionOutline;

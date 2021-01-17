@@ -5,7 +5,7 @@ import OutlinerService from '../../outliner/OutlinerService';
 
 class SchemaOutliner extends Component<{}, { [key: string]: any }> {
 
-  constructor(props) {
+  constructor(props: Readonly<{}>) {
     super(props);
     this.state = {
       collections: [],
@@ -24,7 +24,6 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
   async getOutlinedData() {
     this.setState({ loading: true, connected: true });
     const outlinedCollections = await OutlinerService.getOutlinedData();
-    console.log(outlinedCollections);
     this.setState({ collections: outlinedCollections }, () => {
       this.setState({ loading: false });
     });
@@ -46,7 +45,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
             if (this.state.connected) {
               return (
                 <div id='collectionsOutlines'>
-                  {this.state.collections.map(collection => {
+                  {this.state.collections.map((collection: any) => {
                     return <CollectionOutline key={collection.name} collection={collection} />
                   })}
                 </div>
