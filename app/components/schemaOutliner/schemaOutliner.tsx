@@ -3,6 +3,7 @@ import publicIp from 'public-ip';
 import './schemaOutliner.global.scss';
 import CollectionOutline from './collectionOutline';
 import OutlinerService from '../../outliner/OutlinerService';
+import { InputGroup, FormControl } from 'react-bootstrap';
 
 class SchemaOutliner extends Component<{}, { [key: string]: any }> {
 
@@ -11,7 +12,6 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
     this.state = {
       collections: [],
       loading: false,
-      srv: '',
       uri: '',
       dbName: '',
       connected: false,
@@ -36,14 +36,21 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
   render() {
     return (
       <div id='schemaOutliner'>
-        <h1>Schema Outliner <span className='status'></span></h1>
-        <div id='ipDisplay'>{ this.state.ip }</div>
-        <div id='controls'>
-          <input id='srvInput' value={this.state.srv} onChange={(e) => this.setState({ srv: e.target.value})} placeholder='SRV' />
-          <button onClick={()=>this.getOutlinedData()}>Outline</button>
-        </div>
+        <div id='ipDisplay'>{this.state.ip}</div>
+        <InputGroup className="mb-3">
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">URI</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl
+            placeholder="mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]"
+            aria-label="Username"
+            aria-describedby="basic-addon1"
+            value={this.state.srv}
+            onChange={(e) => this.setState({ uri: e.target.value})}
+          />
+        </InputGroup>
         {(() => {
-          if(this.state.loading) {
+          if (this.state.loading) {
             return <p>Loading...</p>
           } else {
             if (this.state.connected) {
