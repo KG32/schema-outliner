@@ -22,6 +22,9 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
   async componentDidMount() {
     OutlinerService.startOutliner();
     this.setState({ ip: await publicIp.v4() });
+
+    // dev
+    this.getOutlinedData();
   }
 
   async getOutlinedData() {

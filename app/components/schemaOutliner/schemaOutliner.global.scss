@@ -9,13 +9,18 @@ $standardBorder: 1px solid grey;
   flex-direction: column;
   padding: 10px;
   color: grey;
+  padding-top: 50px;
   #title {
     font-size: 25px;
   }
   #ipDisplay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     top: 0;
     right: 0;
+    height: 30px;
     padding: 10px;
     border-left: $standardBorder;
     border-bottom: $standardBorder;

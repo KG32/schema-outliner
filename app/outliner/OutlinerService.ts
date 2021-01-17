@@ -41,9 +41,14 @@ class OutlinerService {
   handleProcessEvents() {
     this.process?.on('message', (data) => {
       const { type, payload } = data;
+      console.log(type, payload);
       switch(type) {
         case 'dbData':
           this.tmpDbData = { dbName: payload.dbName, collections: payload.collections };
+          break;
+        case 'connectionErr':
+          console.log('received conn err');
+          alert('Connection error');
           break;
         default:
         console.error('unknown msg type', type);
@@ -62,13 +67,8 @@ class OutlinerService {
   }
 
   async startOutliner() {
-    console.log('start outliner');
-    if (this.process) {
-      console.log('process already exists');
-      return;
-    } else {
-      this.process = fork(`${__dirname}/outliner/outlinerProcess.js`, [], { silent: true });
-    }
+    if (this.process) return;
+    this.process = fork(`${__dirname}/outliner/outlinerProcess.js`, [], { silent: true });
   }
 
   requestDbData() {
@@ -89,16 +89,24 @@ class OutlinerService {
       const docsCount = docs.length;
       for (let d = 0; d < docsCount; d++) {
         const doc = docs[d];
-        for (const key in doc) {
-          if ({}.hasOwnProperty.call(doc, key)) {
-            const existingKeyLog = schemaKeys[key];
+        for (const [key, value] of Object.entries(doc)) {
+          const existingKeyLog = schemaKeys[key];
             if (existingKeyLog) {
               schemaKeys[key] = existingKeyLog + 1;
             } else {
               schemaKeys[key] = 1;
             }
-          }
         }
+        // for (const key in doc) {
+        //   if ({}.hasOwnProperty.call(doc, key)) {
+        //     const existingKeyLog = schemaKeys[key];
+        //     if (existingKeyLog) {
+        //       schemaKeys[key] = existingKeyLog + 1;
+        //     } else {
+        //       schemaKeys[key] = 1;
+        //     }
+        //   }
+        // }
       }
       for (const schemaKey in schemaKeys) {
         if ({}.hasOwnProperty.call(schemaKeys, schemaKey)) {
@@ -108,7 +116,7 @@ class OutlinerService {
           outlinedCollection.keys.push(outlinedKey);
         }
       }
-      outlinedCollection.keys.sort((x, y) => x.percentage - y.percentage);
+      // outlinedCollection.keys.sort((x, y) => x.percentage - y.percentage);
       outlinedCollections.push(outlinedCollection);
     }
     return outlinedCollections;

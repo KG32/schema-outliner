@@ -23,10 +23,14 @@ process.on('message', async (data) => {
   const { type, options } = data;
   switch(type) {
     case 'dbData':
-      const { uri, dbName } = options;
-      const db = await connectToDb(options.uri, options.dbName);
-      const collections = await getCollections(db);
-      process.send({ type: 'dbData', payload: { collections }});
+      try {
+        const { uri, dbName } = options;
+        const db = await connectToDb(options.uri, options.dbName);
+        const collections = await getCollections(db);
+        process.send({ type: 'dbData', payload: { collections }});
+      } catch (e) {
+        process.send({ type: 'connectionErr', payload: { err: e }});
+      }
       break;
     default:
       console.error('unknown msg');
