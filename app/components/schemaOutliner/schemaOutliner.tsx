@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import publicIp from 'public-ip';
 import './schemaOutliner.global.scss';
 import CollectionOutline from './collectionOutline';
 import OutlinerService from '../../outliner/OutlinerService';
@@ -14,11 +15,13 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
       uri: '',
       dbName: '',
       connected: false,
+      ip: ''
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     OutlinerService.startOutliner();
+    this.setState({ ip: await publicIp.v4() });
   }
 
   async getOutlinedData() {
@@ -34,6 +37,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
     return (
       <div id='schemaOutliner'>
         <h1>Schema Outliner <span className='status'></span></h1>
+        <div id='ipDisplay'>{ this.state.ip }</div>
         <div id='controls'>
           <input id='srvInput' value={this.state.srv} onChange={(e) => this.setState({ srv: e.target.value})} placeholder='SRV' />
           <button onClick={()=>this.getOutlinedData()}>Outline</button>
