@@ -22,14 +22,11 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
   async componentDidMount() {
     OutlinerService.startOutliner();
     this.setState({ ip: await publicIp.v4() });
-
-    // dev
-    this.getOutlinedData();
   }
 
   async getOutlinedData() {
     this.setState({ loading: true, connected: true });
-    const outlinedCollections = await OutlinerService.getOutlinedData();
+    const outlinedCollections = await OutlinerService.getOutlinedData(this.state.uri);
     this.setState({ collections: outlinedCollections }, () => {
       this.setState({ loading: false });
     });
@@ -48,9 +45,16 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
             placeholder="mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]"
             aria-label="Username"
             aria-describedby="basic-addon1"
-            value={this.state.srv}
+            value={this.state.uri}
             onChange={(e) => this.setState({ uri: e.target.value})}
           />
+          <button
+            onClick={() => this.getOutlinedData()}
+            className="btn btn-primary"
+            type="submit"
+          >
+            Outline
+          </button>
         </InputGroup>
         {(() => {
           if (this.state.loading) {

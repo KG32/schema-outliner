@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 
 async function connectToDb(uri, dbName) {
-  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, connectTimeoutMS: 1000 });
   return client.db(dbName);
 }
 

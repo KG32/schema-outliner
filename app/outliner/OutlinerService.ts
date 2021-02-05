@@ -41,7 +41,6 @@ class OutlinerService {
   handleProcessEvents() {
     this.process?.on('message', (data) => {
       const { type, payload } = data;
-      console.log(type, payload);
       switch(type) {
         case 'dbData':
           this.tmpDbData = { dbName: payload.dbName, collections: payload.collections };
@@ -71,8 +70,9 @@ class OutlinerService {
     this.process = fork(`${__dirname}/outliner/outlinerProcess.js`, [], { silent: true });
   }
 
-  requestDbData() {
-    this.process?.send({ type: 'dbData', options: { uri: 'mongodb+srv://outlineragent:pass123@cluster0.p83b2.mongodb.net/testdb?retryWrites=true&w=majority'}});
+  requestDbData(uri: string) {
+    // this.process?.send({ type: 'dbData', options: { uri: 'mongodb+srv://outlineragent:pass123@cluster0.p83b2.mongodb.net/testdb?retryWrites=true&w=majority'}});
+    this.process?.send({type: 'dbData', options: { uri }});
   }
 
   outlineCollections(collectionsData: CollectionData[]): OutlinedCollection[] {
@@ -122,9 +122,9 @@ class OutlinerService {
     return outlinedCollections;
   }
 
-  getOutlinedData() {
+  getOutlinedData(uri: string) {
     return new Promise((resolve) => {
-      this.requestDbData();
+      this.requestDbData(uri);
       const tmpDbDataInterval = setInterval(() => {
         if (this.tmpDbData) {
           clearInterval(tmpDbDataInterval);
