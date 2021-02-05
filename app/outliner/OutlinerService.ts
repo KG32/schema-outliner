@@ -71,7 +71,6 @@ class OutlinerService {
   }
 
   requestDbData(uri: string) {
-    // this.process?.send({ type: 'dbData', options: { uri: 'mongodb+srv://outlineragent:pass123@cluster0.p83b2.mongodb.net/testdb?retryWrites=true&w=majority'}});
     this.process?.send({type: 'dbData', options: { uri }});
   }
 
@@ -79,17 +78,17 @@ class OutlinerService {
     const outlinedCollections: OutlinedCollection[] = [];
     for (let i = 0; i < collectionsData.length; i++) {
       const collection = collectionsData[i];
-      const outlinedCollection = {
+      const outlinedCollection: OutlinedCollection = {
         name: collection.name,
         keys: [],
         docsCount: collection.docs.length,
       };
-      const schemaKeys = {};
+      const schemaKeys: {[key: string] : any} = {};
       const { docs } = collection;
       const docsCount = docs.length;
       for (let d = 0; d < docsCount; d++) {
         const doc = docs[d];
-        for (const [key, value] of Object.entries(doc)) {
+        for (const [key] of Object.entries(doc)) {
           const existingKeyLog = schemaKeys[key];
             if (existingKeyLog) {
               schemaKeys[key] = existingKeyLog + 1;
@@ -97,22 +96,12 @@ class OutlinerService {
               schemaKeys[key] = 1;
             }
         }
-        // for (const key in doc) {
-        //   if ({}.hasOwnProperty.call(doc, key)) {
-        //     const existingKeyLog = schemaKeys[key];
-        //     if (existingKeyLog) {
-        //       schemaKeys[key] = existingKeyLog + 1;
-        //     } else {
-        //       schemaKeys[key] = 1;
-        //     }
-        //   }
-        // }
       }
       for (const schemaKey in schemaKeys) {
         if ({}.hasOwnProperty.call(schemaKeys, schemaKey)) {
           const count = schemaKeys[schemaKey];
           const percentage = (count / docsCount) * 100;
-          const outlinedKey = { keyName: schemaKey, count, percentage: percentage.toFixed(2) };
+          const outlinedKey: OutlinedKey = { keyName: schemaKey, count, percentage: Number(percentage.toFixed(2)) };
           outlinedCollection.keys.push(outlinedKey);
         }
       }
