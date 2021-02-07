@@ -32,6 +32,7 @@ class OutlinerService {
   watchForProcess() {
     const processWatcher = setInterval(() => {
       if (this.process) {
+        console.log('process [wfp]');
         this.handleProcessEvents();
         clearInterval(processWatcher);
       }
@@ -66,20 +67,35 @@ class OutlinerService {
       console.log('process exit', code);
       this.process = null;
     });
+    this.process?.on('disconnect', () => {
+      console.log('process disconnected');
+      this.process = null;
+    });
+    this.process?.on('uncaughtException', () => {
+      console.log('uncaughtException');
+      this.process = null;
+    });
     this.process?.stdout?.on('data', (data) => {
       console.log('STDOUT', data.toString());
     });
     this.process?.stderr?.on('data', (data) => {
       console.error('SDTERR', data.toString());
-    })
+    });
   }
 
-  async startOutliner() {
+  startOutliner() {
     if (this.process) return;
-    this.process = fork(`${__dirname}/outliner/outlinerProcess.js`, [], { silent: true });
+    console.log('starting process');
+    try {
+      this.process = fork(`${__dirname}/outliner/outlinerProcess.js`, [], { silent: true });
+    } catch (e) {
+      console.log('fork err');
+      console.log(e);
+    }
   }
 
   requestDbData(uri: string) {
+    console.log(this.process);
     this.process?.send({type: 'dbData', options: { uri }});
   }
 
