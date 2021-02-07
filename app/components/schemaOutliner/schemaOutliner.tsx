@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import publicIp from 'public-ip';
 import './schemaOutliner.global.scss';
-import CollectionOutline from './collectionOutline';
-import OutlinerService from '../../outliner/OutlinerService';
 import { InputGroup, FormControl } from 'react-bootstrap';
+import OutlinerService from '../../outliner/OutlinerService';
+import CollectionOutline from './collectionOutline';
 
 class SchemaOutliner extends Component<{}, { [key: string]: any }> {
-
   constructor(props: Readonly<{}>) {
     super(props);
     this.state = {
@@ -15,8 +14,8 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
       uri: 'mongodb+srv://outlineragent:pass123@cluster0.p83b2.mongodb.net/sample_mflix?retryWrites=true&w=majority',
       dbName: '',
       connected: false,
-      ip: ''
-    }
+      ip: '',
+    };
   }
 
   async componentDidMount() {
@@ -51,7 +50,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
             aria-label="Username"
             aria-describedby="basic-addon1"
             value={this.state.uri}
-            onChange={(e) => this.setState({ uri: e.target.value})}
+            onChange={(e) => this.setState({ uri: e.target.value })}
             onKeyDown={(e: { keyCode: number }) => this.watchForEnter(e.keyCode)}
           />
           <button
@@ -65,25 +64,19 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
         </InputGroup>
         {(() => {
           if (this.state.loading) {
-            return <p>Loading...</p>
-          } else {
-            if (this.state.connected) {
-              return (
-                <div id='collectionsOutlines' className='container-fluid'>
-                  {this.state.collections.map((collection: any) => {
-                    return <CollectionOutline key={collection.name} collection={collection} />
-                  })}
-                </div>
-              )
-            } else {
-              return <p>No connection.</p>
-            }
+            return <p>Loading...</p>;
+          } if (this.state.connected) {
+            return (
+              <div id='collectionsOutlines' className='container-fluid'>
+                {this.state.collections.map((collection: any) => <CollectionOutline key={collection.name} collection={collection} />)}
+              </div>
+            );
           }
+          return <p>No connection.</p>;
         })()}
       </div>
-    )
+    );
   }
 }
-
 
 export default SchemaOutliner;

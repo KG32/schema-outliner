@@ -1,19 +1,24 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
+    // es2021: true,
+    es6: true
   },
   extends: [
-    'airbnb-typescript/base',
+    "plugin:@typescript-eslint/recommended" // Uses the recommended rules from the @typescript-eslint/eslint-plugin
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
-    project: './tsconfig.json'
+    project: './tsconfig.json',
+    ecmaFeatures: {
+      jsx: true // Allows for the parsing of JSX
+    },
   },
   plugins: [
     '@typescript-eslint',
+    'plugin:react/recommended'
   ],
   rules: {
     'import/prefer-default-export': 'off',
