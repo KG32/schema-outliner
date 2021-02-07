@@ -67,7 +67,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
             return <p>Loading...</p>;
           } if (this.state.connected) {
             return (
-              <div id='collectionsOutlines' className='container-fluid'>
+              <div id='collectionsOutlines'>
                 {this.state.collections.map((collection: any) => <CollectionOutline key={collection.name} collection={collection} />)}
               </div>
             );
