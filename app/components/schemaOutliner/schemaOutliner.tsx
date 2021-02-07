@@ -52,6 +52,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
             onClick={() => this.getOutlinedData()}
             className="btn btn-primary"
             type="submit"
+            disabled={!this.state.uri}
           >
             Outline
           </button>
