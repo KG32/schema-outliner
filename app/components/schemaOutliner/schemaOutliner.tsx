@@ -11,7 +11,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
     this.state = {
       collections: [],
       loading: false,
-      uri: 'mongodb+srv://outlineragent:pass123@cluster0.p83b2.mongodb.net/sample_mflix?retryWrites=true&w=majority',
+      uri: '',
       dbName: '',
       connected: false,
       ip: '',
