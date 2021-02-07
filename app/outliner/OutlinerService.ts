@@ -71,6 +71,16 @@ class OutlinerService {
       console.log('process disconnected');
       this.process = null;
     });
+    this.process?.on('close', () => {
+      console.log('process close');
+    });
+    this.process?.on('error', (err) => {
+      console.log('process err');
+      console.log(err);
+    });
+    this.process?.on('message', () => {
+      console.log('process message');
+    });
     this.process?.on('uncaughtException', () => {
       console.log('uncaughtException');
       this.process = null;
