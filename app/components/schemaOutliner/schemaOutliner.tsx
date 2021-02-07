@@ -52,7 +52,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
             aria-describedby="basic-addon1"
             value={this.state.uri}
             onChange={(e) => this.setState({ uri: e.target.value})}
-            onKeyDown={(e) => this.watchForEnter(e.keyCode)}
+            onKeyDown={(e: { keyCode: number }) => this.watchForEnter(e.keyCode)}
           />
           <button
             onClick={() => this.getOutlinedData()}
