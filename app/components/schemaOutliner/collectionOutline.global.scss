@@ -1,4 +1,8 @@
+$card-margin: 0.5rem;
+
 .collection-outline {
+  margin-right: $card-margin;
+  // margin-bottom: $card-margin;
   .outline-content {
     display: flex;
     flex-direction: column;

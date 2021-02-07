@@ -12,7 +12,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
     this.state = {
       collections: [],
       loading: false,
-      uri: '',
+      uri: 'mongodb+srv://outlineragent:pass123@cluster0.p83b2.mongodb.net/sample_mflix?retryWrites=true&w=majority',
       dbName: '',
       connected: false,
       ip: ''
@@ -32,6 +32,11 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
     });
   }
 
+  watchForEnter(keyCode: number) {
+    if (keyCode === 13) {
+      this.getOutlinedData();
+    }
+  }
 
   render() {
     return (
@@ -47,6 +52,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
             aria-describedby="basic-addon1"
             value={this.state.uri}
             onChange={(e) => this.setState({ uri: e.target.value})}
+            onKeyDown={(e) => this.watchForEnter(e.keyCode)}
           />
           <button
             onClick={() => this.getOutlinedData()}
@@ -63,7 +69,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
           } else {
             if (this.state.connected) {
               return (
-                <div id='collectionsOutlines'>
+                <div id='collectionsOutlines' className='container-fluid'>
                   {this.state.collections.map((collection: any) => {
                     return <CollectionOutline key={collection.name} collection={collection} />
                   })}
