@@ -29,7 +29,7 @@ process.on('message', async (data) => {
         const collections = await getCollections(db);
         process.send({ type: 'dbData', payload: { collections }});
       } catch (e) {
-        process.send({ type: 'connectionErr', payload: { err: e }});
+        process.send({ type: 'connectionErr', payload: { errMsg: e.message }});
       }
       break;
     default:

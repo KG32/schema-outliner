@@ -46,8 +46,17 @@ class OutlinerService {
           this.tmpDbData = { dbName: payload.dbName, collections: payload.collections };
           break;
         case 'connectionErr':
-          console.log('received conn err');
-          alert('Connection error');
+          switch (payload.errMsg) {
+            case 'bad auth : Authentication failed.':
+              alert('Auth error.');
+              break;
+            case 'dbEmptyOrNotFound':
+              alert('DB empty of not found.');
+              break;
+            default:
+              alert('Connection error');
+              console.log(payload.errMsg);
+          }
           break;
         default:
         console.error('unknown msg type', type);
