@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import publicIp from 'public-ip';
-import * as bootstrap from 'bootstrap';
 import './schemaOutliner.global.scss';
 import { InputGroup, FormControl } from 'react-bootstrap';
 import OutlinerService from '../../outliner/OutlinerService';
@@ -31,7 +30,7 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
       });
     } catch (e) {
       this.setState({ loading: false, connected: false });
-      new bootstrap.Alert('err');
+      alert('Error');
     }
   }
 
@@ -78,11 +77,6 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
           }
           return <p>No connection.</p>;
         })()}
-        {/* <div id='toastBox'>
-          <div className="alert alert-danger" role="alert">
-            A simple danger alert—check it out!
-          </div>
-        </div> */}
       </div>
     );
   }
