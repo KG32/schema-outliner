@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import publicIp from 'public-ip';
+import * as bootstrap from 'bootstrap';
 import './schemaOutliner.global.scss';
 import { InputGroup, FormControl } from 'react-bootstrap';
 import OutlinerService from '../../outliner/OutlinerService';
@@ -13,22 +14,25 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
       loading: false,
       uri: '',
       dbName: '',
-      connected: false,
       ip: '',
     };
   }
 
   async componentDidMount() {
-    OutlinerService.startOutliner();
     this.setState({ ip: await publicIp.v4() });
   }
 
   async getOutlinedData() {
-    this.setState({ loading: true, connected: true });
-    const outlinedCollections = await OutlinerService.getOutlinedData(this.state.uri);
-    this.setState({ collections: outlinedCollections }, () => {
-      this.setState({ loading: false });
-    });
+    this.setState({ loading: true });
+    try {
+      const outlinedCollections = await OutlinerService.getOutlinedData(this.state.uri);
+      this.setState({ collections: outlinedCollections }, () => {
+        this.setState({ loading: false, connected: true });
+      });
+    } catch (e) {
+      this.setState({ loading: false, connected: false });
+      new bootstrap.Alert('err');
+    }
   }
 
   watchForEnter(keyCode: number) {
@@ -74,6 +78,11 @@ class SchemaOutliner extends Component<{}, { [key: string]: any }> {
           }
           return <p>No connection.</p>;
         })()}
+        {/* <div id='toastBox'>
+          <div className="alert alert-danger" role="alert">
+            A simple danger alert—check it out!
+          </div>
+        </div> */}
       </div>
     );
   }

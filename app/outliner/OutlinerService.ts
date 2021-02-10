@@ -1,4 +1,4 @@
-import { fork, ChildProcess } from 'child_process';
+import { getDbData } from './getDbData';
 
 export interface CollectionData {
   name: string;
@@ -20,94 +20,6 @@ interface OutlinedKey {
 }
 
 class OutlinerService {
-  private process: ChildProcess | null;
-  private tmpDbData: {dbName: string, collections: [name: string, docs: any]} | null;
-
-  constructor() {
-    this.process = null;
-    this.tmpDbData = null;
-    this.watchForProcess();
-  }
-
-  watchForProcess() {
-    const processWatcher = setInterval(() => {
-      if (this.process) {
-        console.log('process [wfp]');
-        this.handleProcessEvents();
-        clearInterval(processWatcher);
-      }
-    }, 1000);
-  }
-
-  handleProcessEvents() {
-    this.process?.on('message', (data) => {
-      const { type, payload } = data;
-      switch(type) {
-        case 'dbData':
-          this.tmpDbData = { dbName: payload.dbName, collections: payload.collections };
-          break;
-        case 'connectionErr':
-          switch (payload.errMsg) {
-            case 'bad auth : Authentication failed.':
-              alert('Auth error.');
-              break;
-            case 'dbEmptyOrNotFound':
-              alert('DB empty of not found.');
-              break;
-            default:
-              alert('Connection error');
-              console.log(payload.errMsg);
-          }
-          break;
-        default:
-        console.error('unknown msg type', type);
-      }
-    });
-    this.process?.on('exit', (code) => {
-      console.log('process exit', code);
-      this.process = null;
-    });
-    this.process?.on('disconnect', () => {
-      console.log('process disconnected');
-      this.process = null;
-    });
-    this.process?.on('close', () => {
-      console.log('process close');
-    });
-    this.process?.on('error', (err) => {
-      console.log('process err');
-      console.log(err);
-    });
-    this.process?.on('message', () => {
-      console.log('process message');
-    });
-    this.process?.on('uncaughtException', () => {
-      console.log('uncaughtException');
-      this.process = null;
-    });
-    this.process?.stdout?.on('data', (data) => {
-      console.log('STDOUT', data.toString());
-    });
-    this.process?.stderr?.on('data', (data) => {
-      console.error('SDTERR', data.toString());
-    });
-  }
-
-  startOutliner() {
-    if (this.process) return;
-    console.log('starting process');
-    try {
-      this.process = fork(`${__dirname}/outliner/outlinerProcess.js`, [], { silent: true });
-    } catch (e) {
-      console.log('fork err');
-      console.log(e);
-    }
-  }
-
-  requestDbData(uri: string) {
-    console.log(this.process);
-    this.process?.send({type: 'dbData', options: { uri }});
-  }
 
   outlineCollections(collectionsData: CollectionData[]): OutlinedCollection[] {
     const outlinedCollections: OutlinedCollection[] = [];
@@ -146,20 +58,9 @@ class OutlinerService {
     return outlinedCollections;
   }
 
-  getOutlinedData(uri: string) {
-    return new Promise((resolve) => {
-      this.requestDbData(uri);
-      const tmpDbDataInterval = setInterval(() => {
-        if (this.tmpDbData) {
-          clearInterval(tmpDbDataInterval);
-          const { collections } = this.tmpDbData;
-          this.tmpDbData = null;
-          const outlinedData = this.outlineCollections(collections);
-          console.log('outlined data');
-          resolve(outlinedData);
-        }
-      }, 500);
-    })
+  async getOutlinedData(uri: string) {
+    const dbCollections = await getDbData(uri);
+    return this.outlineCollections(dbCollections);
   }
 }
 
